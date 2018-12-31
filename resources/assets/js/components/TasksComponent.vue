@@ -3,7 +3,7 @@
         <div class="row">
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-primary">
-                    <div class="panel-heading"><h2>All Tasks <span class="pull-right"><button type="button" class="btn btn-success btn-sm">Add</button></span></h2></div>
+                    <div class="panel-heading"><h2>All Tasks <span class="pull-right"><button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#addtask">Add</button></span></h2></div>
                     <div class="panel-body">
                         <ul class="list-group">
                         <li class="list-group-item" v-for="t in tasks.data">{{ t.id }} - {{ t.name }}
@@ -16,11 +16,15 @@
                 </div>
             </div>
         </div>
+
+        <div id="modal">
+        <addtaskmodel></addtaskmodel>
+        </div>
     </div>
 </template>
 
 <script type="text/javascript">
-Vue.component('pagination', require('laravel-vue-pagination'));
+Vue.component('addtaskmodel', require('./AddModelComponent.vue'));
     export default {
         mounted() {
             console.log('Tasks Component mounted.')

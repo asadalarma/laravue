@@ -35,6 +35,7 @@ const routes=[
 ];
 //Vue.component('example-component', require('./components/ExampleComponent.vue'));
 //Vue.component('tasks', require('./components/TasksComponent.vue'));
+Vue.component('pagination', require('laravel-vue-pagination'));
 const router=new VueRouter({
     routes
 });

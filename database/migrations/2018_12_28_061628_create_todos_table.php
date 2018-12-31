@@ -15,7 +15,9 @@ class CreateTodosTable extends Migration
     {
         Schema::create('todos', function (Blueprint $table) {
             $table->increments('id');
+            $table->text('name');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
