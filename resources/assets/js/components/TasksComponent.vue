@@ -1,6 +1,9 @@
 <template>
     <div class="container">
         <div class="row">
+        <div class="alert alert-success" v-if="successmessage.length > 0">
+                          <strong>Success!</strong> {{ successmessage }}
+                        </div>
             <div class="col-md-8 col-md-offset-2">
                 <div class="panel panel-primary">
                     <div class="panel-heading"><h2>All Tasks <span class="pull-right"><button type="button" class="btn btn-success btn-sm" data-toggle="modal" data-target="#addtask">Add</button></span></h2></div>
@@ -18,7 +21,7 @@
         </div>
 
         <div id="modal">
-        <addtaskmodel></addtaskmodel>
+        <addtaskmodel v-on:recordadded="refreshrecord"></addtaskmodel>
         </div>
     </div>
 </template>
@@ -32,7 +35,8 @@ Vue.component('addtaskmodel', require('./AddModelComponent.vue'));
         data()
         {
         return {
-        tasks:{}
+        tasks:{},
+        successmessage:'',
         }
         },
         methods:{
@@ -41,6 +45,12 @@ Vue.component('addtaskmodel', require('./AddModelComponent.vue'));
                         axios.get('http://localhost/laravue/public/tasks?page=' + page)
                             .then((response) => this.tasks=response.data)
                             .catch((error) => console.log(error));
+                          },
+                          refreshrecord(response)
+                          {
+                          this.tasks = response.data;
+                          $("#addtask").modal("hide");
+                          this.successmessage="Task Successfully Added";
                           }
         },
         created(){

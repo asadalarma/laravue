@@ -13,10 +13,9 @@ class TodoController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Todo $todo)
     {
-        $tasks = Todo::orderBy('created_at','desc')->paginate(2);
-        return request()->json(200,$tasks);
+        return $this->paginatemodel($todo,10);
     }
 
     /**
@@ -40,7 +39,7 @@ class TodoController extends Controller
        $task = Todo::create($request->all());
        if($task)
        {
-           return request()->json(200,$task);
+           return $this->paginatemodel($task,10);
        }
     }
 

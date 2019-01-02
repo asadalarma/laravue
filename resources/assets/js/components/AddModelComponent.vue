@@ -41,18 +41,13 @@
                       axios.post('http://localhost/laravue/public/tasks',{
                       'name':this.name
                        })
-                       .then(function(response)
-                        {
-                        console.log(response);
-                        $("#addtask").modal("hide");
-
-                        }
-                       )
+                       .then((response) => this.$emit('recordadded',response))
                        .catch((error) => console.log(error));
+                       this.reset();
                        },
                        reset()
                        {
-                           this.task.name = '';
+                           this.name = '';
                        }
 
              }
