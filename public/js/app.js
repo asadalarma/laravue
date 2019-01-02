@@ -46704,7 +46704,7 @@ exports = module.exports = __webpack_require__(4)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -46740,6 +46740,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 Vue.component('addtaskmodel', __webpack_require__(55));
 /* harmony default export */ __webpack_exports__["default"] = ({
@@ -46748,7 +46751,8 @@ Vue.component('addtaskmodel', __webpack_require__(55));
     },
     data: function data() {
         return {
-            tasks: {}
+            tasks: {},
+            successmessage: ''
         };
     },
 
@@ -46764,6 +46768,11 @@ Vue.component('addtaskmodel', __webpack_require__(55));
             }).catch(function (error) {
                 return console.log(error);
             });
+        },
+        refreshrecord: function refreshrecord(response) {
+            this.tasks = response.data;
+            $("#addtask").modal("hide");
+            this.successmessage = "Task Successfully Added";
         }
     },
     created: function created() {
@@ -46858,7 +46867,7 @@ exports = module.exports = __webpack_require__(4)(false);
 
 
 // module
-exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
+exports.push([module.i, "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n", ""]);
 
 // exports
 
@@ -46897,6 +46906,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     mounted: function mounted() {
@@ -46904,23 +46916,27 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
     },
     data: function data() {
         return {
-            name: ''
+            name: '',
+            error: []
         };
     },
 
     methods: {
         addRecord: function addRecord() {
+            var _this = this;
+
             axios.post('http://localhost/laravue/public/tasks', {
                 'name': this.name
             }).then(function (response) {
-                console.log(response);
-                $("#addtask").modal("hide");
+                return _this.$emit('recordadded', response);
             }).catch(function (error) {
-                return console.log(error);
+                _this.error = error.response.data.errors.name;
+                console.log(_this.error);
             });
+            this.reset();
         },
         reset: function reset() {
-            this.task.name = '';
+            this.name = '';
         }
     }
 
@@ -46943,6 +46959,19 @@ var render = function() {
           _vm._m(0),
           _vm._v(" "),
           _c("div", { staticClass: "modal-body" }, [
+            _vm.error.length > 0
+              ? _c(
+                  "ul",
+                  { staticClass: "list-unstyled" },
+                  _vm._l(_vm.error, function(err) {
+                    return _c("li", { staticClass: "alert alert-danger" }, [
+                      _vm._v(_vm._s(err))
+                    ])
+                  }),
+                  0
+                )
+              : _vm._e(),
+            _vm._v(" "),
             _c("div", { staticClass: "form-group" }, [
               _c("label", { attrs: { for: "name" } }, [_vm._v("Name")]),
               _vm._v(" "),
@@ -47033,6 +47062,13 @@ var render = function() {
   var _c = _vm._self._c || _h
   return _c("div", { staticClass: "container" }, [
     _c("div", { staticClass: "row" }, [
+      _vm.successmessage.length > 0
+        ? _c("div", { staticClass: "alert alert-success" }, [
+            _c("strong", [_vm._v("Success!")]),
+            _vm._v(" " + _vm._s(_vm.successmessage) + "\n                    ")
+          ])
+        : _vm._e(),
+      _vm._v(" "),
       _c("div", { staticClass: "col-md-8 col-md-offset-2" }, [
         _c("div", { staticClass: "panel panel-primary" }, [
           _vm._m(0),
@@ -47071,7 +47107,12 @@ var render = function() {
       ])
     ]),
     _vm._v(" "),
-    _c("div", { attrs: { id: "modal" } }, [_c("addtaskmodel")], 1)
+    _c(
+      "div",
+      { attrs: { id: "modal" } },
+      [_c("addtaskmodel", { on: { recordadded: _vm.refreshrecord } })],
+      1
+    )
   ])
 }
 var staticRenderFns = [

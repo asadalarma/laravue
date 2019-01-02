@@ -10,6 +10,9 @@
             <h4 class="modal-title">Add New Record!</h4>
           </div>
           <div class="modal-body">
+                <ul v-if="error.length > 0" class="list-unstyled">
+                <li v-for="err in error" class="alert alert-danger">{{err}}</li>
+                </ul>
 
                 <div class="form-group">
                   <label for="name">Name</label>
@@ -33,7 +36,8 @@
         },
         data(){
             return {
-                name:''
+                name:'',
+                error:[]
             }
         },
         methods:{
@@ -42,7 +46,10 @@
                       'name':this.name
                        })
                        .then((response) => this.$emit('recordadded',response))
-                       .catch((error) => console.log(error));
+                       .catch((error) => {
+                       this.error=error.response.data.errors.name;
+                       console.log(this.error);
+                       });
                        this.reset();
                        },
                        reset()
